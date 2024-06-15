@@ -1,0 +1,13 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  z-index: 2;
+  top: 20px;
+  color: white;
+  height: fit-content;
+  div {
+    margin: 0 10px;
+  }
+}

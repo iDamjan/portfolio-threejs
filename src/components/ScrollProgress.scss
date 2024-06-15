@@ -1,0 +1,10 @@
+.container {
+  width: 5px;
+  height: 60%;
+  position: absolute;
+  top: auto;
+  bottom: auto;
+  right: 20px;
+  ::after {
+  }
+}
