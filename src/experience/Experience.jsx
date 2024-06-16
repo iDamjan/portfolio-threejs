@@ -4,9 +4,9 @@ import "./SimulationMaterial.jsx";
 
 import * as THREE from "three";
 import { createPortal, useFrame } from "@react-three/fiber";
-import { getDataTexture } from "./getDataTexture.js";
+import { getDataTexture, getMorphDataTexture } from "./getDataTexture.js";
 import { useLayoutEffect, useRef } from "react";
-import { useFBO, Text, useScroll, Html } from "@react-three/drei";
+import { useFBO, Text, useScroll, useGLTF } from "@react-three/drei";
 import EnvironmentParticles from "./EnvironmentParticles.jsx";
 import ScrollProgress from "../components/ScrollProgress.jsx";
 import gsap from "gsap";
@@ -58,6 +58,8 @@ const Experience = () => {
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
   const scroll = useScroll();
 
+  const gltf = useGLTF("./models/robot.glb");
+
   let target0 = useFBO(SIZE, SIZE, {
     minFilter: THREE.NearestFilter,
     magFilter: THREE.NearestFilter,
@@ -88,9 +90,11 @@ const Experience = () => {
     });
 
     timeline.current
-      .to(meshParticles.current.position, { x: 13 }, 0)
-      .to(meshParticles.current.rotation, { x: 3 }, 0)
-      .to(meshParticles.current.position, { z: 5 }, 0);
+      .to(meshParticles.current.position, { x: 10 }, 0)
+      .to(meshParticles.current.rotation, { x: -1.5 }, 0)
+      .to(meshParticles.current.position, { z: 10 }, 0)
+      .to(meshParticles.current.rotation, { z: -1 }, 0)
+      .to(meshParticles.current.position, { y: -20 }, 0);
 
     timeline.current
       .to(meshParticles.current.position, { x: -10 }, 2)
@@ -106,6 +110,8 @@ const Experience = () => {
     renderMaterial.current.uniforms.uPosition.value = target1.texture;
     simMaterial.current.uniforms.uPosition.value = target0.texture;
 
+    renderMaterial.current.uniforms.uProgress.value = scroll.offset;
+
     let temp = target0;
     target0 = target1;
     target1 = temp;
@@ -114,6 +120,7 @@ const Experience = () => {
     simMaterial.current.uniforms.uBase = new THREE.Uniform(baseTexture);
     simMaterial.current.uniforms.uTime.value = clock.elapsedTime;
     simMaterial.current.uniforms.uDeltaTime.value = delta;
+    simMaterial.current.uniforms.uProgress.value = scroll.offset;
 
     // Rotate sphere
     // meshParticles.current.rotation.x += delta * 0.04;
@@ -138,6 +145,7 @@ const Experience = () => {
             uPosition={getDataTexture(SIZE)}
             uVelocity={getDataTexture(SIZE)}
             uBase={getDataTexture(SIZE)}
+            uNewPosition={getMorphDataTexture(SIZE)}
           />
         </mesh>,
         scene

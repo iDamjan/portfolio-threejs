@@ -42,7 +42,7 @@ const App = () => {
         <EffectComposer>
           <DepthOfField
             focusDistance={0}
-            focalLength={0.2}
+            focalLength={3}
             bokehScale={2}
             height={480}
           />

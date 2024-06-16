@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { getModelPositions } from "./getModelPositions.js";
 
 export function getDataTexture(size) {
   const radius = 8;
@@ -16,6 +17,22 @@ export function getDataTexture(size) {
 
     data.set([x, y, z, w], i * 4);
   }
+
+  let dataTexture = new THREE.DataTexture(
+    data,
+    size,
+    size,
+    THREE.RGBAFormat,
+    THREE.FloatType
+  );
+  dataTexture.needsUpdate = true;
+
+  return dataTexture;
+}
+
+export function getMorphDataTexture(size) {
+  let number = size * size;
+  const data = getModelPositions(size);
 
   let dataTexture = new THREE.DataTexture(
     data,

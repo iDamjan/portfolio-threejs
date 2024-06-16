@@ -3,9 +3,10 @@
 uniform sampler2D uPosition;
 uniform sampler2D uVelocity;
 uniform sampler2D uBase;
+uniform sampler2D uNewPosition;
 uniform float uTime;
 uniform float uDeltaTime;
-
+uniform float uProgress;
 varying vec2 vUv;
 
 // Function to compute a 3D noise vector
@@ -50,9 +51,24 @@ mat3 rotation3dY(float angle) {
 
 
 void main() {
-    
-    vec4 particle = texture(uPosition, vUv);
+
+
+    vec4 newPosition = texture(uNewPosition, vUv);
+    vec4 oldPosition = texture(uPosition, vUv);
     vec4 baseParticle = texture(uBase, vUv);
+
+    float noiseOrigin = simplexNoise4d(vec4(newPosition.xyz * 0.2, 0.0));
+    float noiseTarget = simplexNoise4d(vec4(oldPosition.xyz * 0.2, 0.0));
+    float noise = mix(noiseOrigin, noiseTarget, uProgress);
+    noise = smoothstep(-1.0, 1.0, noise);
+
+    float duration = 0.4;
+    float delay = (1.0 - duration) * noise;
+    float end = delay + duration;
+
+    float progress = smoothstep(delay, end, uProgress * 2.0);
+
+    vec4 particle = mix(oldPosition, newPosition, progress);
 
 
     if(particle.a <= 0.0) { 
@@ -73,7 +89,7 @@ void main() {
 
 
         // Reassemble the particle with the rotated position
-        particle.xyz = particlePos + curlNoise(particlePos) * 0.002 - flowField * 0.01;
+        particle.xyz = particlePos + curlNoise(particlePos) * 0.002 - flowField * 0.01 ;
         particle.y += pow(flowField * 0.01, 2.0);
         particle.x += flowField * 0.03;
         particle.z += flowField * 0.02;
