@@ -3,10 +3,12 @@
 uniform sampler2D uPosition;
 uniform sampler2D uVelocity;
 uniform sampler2D uBase;
+uniform sampler2D uNewBase;
 uniform sampler2D uNewPosition;
 uniform float uTime;
 uniform float uDeltaTime;
 uniform float uProgress;
+uniform float uStrength;
 varying vec2 vUv;
 
 // Function to compute a 3D noise vector
@@ -54,7 +56,9 @@ void main() {
     vec4 newPosition = texture(uNewPosition, vUv);
     vec4 oldPosition = texture(uPosition, vUv);
     
-    vec4 baseParticle = texture(uBase, vUv);
+    vec4 oldBase = texture(uBase, vUv);
+    vec4 newBase = texture(uNewBase, vUv);
+    
 
     float noiseOrigin = simplexNoise4d(vec4(oldPosition.xyz, 0.0));
     float noiseTarget = simplexNoise4d(vec4(newPosition.xyz * 0.2, 0.0));
@@ -62,20 +66,20 @@ void main() {
     noise = smoothstep(-1.0, 1.0, noise);
 
     float duration = 0.1;
-    float delay = (1.0 - duration) * noise + uDeltaTime;
+    float delay = (1.0 - duration) * noise;
     float end = delay + duration;
 
     float progress = smoothstep(delay, end, uProgress * 2.0);
 
-    vec4 particle = mix(oldPosition, newPosition,  uProgress);
-   
+    vec4 baseParticle = mix(oldBase, newBase, progress);
+    newPosition = oldPosition;
 
+    vec4 particle = mix(oldPosition, newPosition,  uProgress);
 
     if(particle.a <= 0.0) { 
         particle.a = mod(particle.a, 2.5);
         particle.xyz = baseParticle.xyz;
     } else { 
-
         // Extract the position (xyz) from the particle
         vec3 particlePos = particle.xyz;
 
@@ -83,18 +87,16 @@ void main() {
     
 
         // Rotate the position around the Y axis
-        particlePos = rotation3dY(uDeltaTime * verticalDistance * 0.1) * particlePos;
 
         float flowField = simplexNoise4d(vec4(particle.xyz, 0.0));
 
-
         // Reassemble the particle with the rotated position
-        particle.xyz = particlePos + curlNoise(particlePos) * 0.002 - flowField * 0.01 ;
+        particle.xyz = particlePos + curlNoise(particlePos) * 0.002 - flowField * 0.001;
         particle.y += pow(flowField * 0.01, 2.0);
-        particle.x += flowField * 0.03;
-        particle.z += flowField * 0.02;
+        particle.x += flowField * 0.003;
+        particle.z += flowField * 0.002;
 
-        particle.a -= uDeltaTime * 0.3;
+        particle.a -= uDeltaTime * 0.5;
     }
 
     // Set the final color output

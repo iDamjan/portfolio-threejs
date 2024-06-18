@@ -92,7 +92,8 @@ const Experience = () => {
       .to(meshParticles.current.rotation, { x: -1.5 }, 0)
       .to(meshParticles.current.position, { z: 10 }, 0)
       .to(meshParticles.current.rotation, { z: -1 }, 0)
-      .to(meshParticles.current.position, { y: -20 }, 0);
+      .to(meshParticles.current.position, { y: -20 }, 0)
+      .to(simMaterial.current.uniforms.uStrength, { value: 0 }, 0);
 
     timeline.current
       .to(meshParticles.current.position, { x: -10 }, 2)

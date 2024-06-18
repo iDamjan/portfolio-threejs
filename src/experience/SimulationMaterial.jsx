@@ -8,10 +8,12 @@ const SimulationMaterial = shaderMaterial(
     uPosition: null,
     uVelocity: null,
     uBase: null,
+    uNewBase: null,
     uTime: null,
     uDeltaTime: null,
     uProgress: null,
     uNewPosition: null,
+    uStrength: 1,
   },
   vertexShader,
   fragmentShader
