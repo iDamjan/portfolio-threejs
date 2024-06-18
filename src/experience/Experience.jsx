@@ -6,12 +6,11 @@ import * as THREE from "three";
 import { createPortal, useFrame } from "@react-three/fiber";
 import { getDataTexture, getMorphDataTexture } from "./getDataTexture.js";
 import { useLayoutEffect, useRef } from "react";
-import { useFBO, Text, useScroll, useGLTF } from "@react-three/drei";
+import { useFBO, Text, useScroll } from "@react-three/drei";
 import EnvironmentParticles from "./EnvironmentParticles.jsx";
-import ScrollProgress from "../components/ScrollProgress.jsx";
 import gsap from "gsap";
 
-const PARTICLES_COUNT = 200000;
+const PARTICLES_COUNT = 300000;
 const SIZE = Math.ceil(Math.sqrt(PARTICLES_COUNT));
 
 const positions = new Float32Array(PARTICLES_COUNT * 3);
@@ -49,7 +48,7 @@ for (let y = 0; y < SIZE; y++) {
     particlesUvArray[i2 + 0] = uvX;
     particlesUvArray[i2 + 1] = uvY;
 
-    particlesSizes[i] = Math.random() + 0.2;
+    particlesSizes[i] = Math.random();
   }
 }
 
@@ -57,8 +56,6 @@ const Experience = () => {
   const scene = new THREE.Scene();
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
   const scroll = useScroll();
-
-  const gltf = useGLTF("./models/robot.glb");
 
   let target0 = useFBO(SIZE, SIZE, {
     minFilter: THREE.NearestFilter,
