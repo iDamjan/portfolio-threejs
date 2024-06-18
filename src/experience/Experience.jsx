@@ -6,11 +6,11 @@ import * as THREE from "three";
 import { createPortal, useFrame } from "@react-three/fiber";
 import { getDataTexture, getMorphDataTexture } from "./getDataTexture.js";
 import { useLayoutEffect, useRef } from "react";
-import { useFBO, Text, useScroll } from "@react-three/drei";
+import { useFBO, Text, useScroll, Float } from "@react-three/drei";
 import EnvironmentParticles from "./EnvironmentParticles.jsx";
 import gsap from "gsap";
 
-const PARTICLES_COUNT = 300000;
+const PARTICLES_COUNT = 50000;
 const SIZE = Math.ceil(Math.sqrt(PARTICLES_COUNT));
 
 const positions = new Float32Array(PARTICLES_COUNT * 3);
@@ -87,12 +87,16 @@ const Experience = () => {
       defaults: { duration: 2, ease: "power1.inOut" },
     });
 
+    meshParticles.current.position.y = -5;
+    meshParticles.current.position.x = 10;
+    meshParticles.current.rotation.y = -7;
+
     timeline.current
-      .to(meshParticles.current.position, { x: 10 }, 0)
+      .to(meshParticles.current.position, { x: 20 }, 0)
       .to(meshParticles.current.rotation, { x: -1.5 }, 0)
-      .to(meshParticles.current.position, { z: 10 }, 0)
+      .to(meshParticles.current.position, { z: 12 }, 0)
       .to(meshParticles.current.rotation, { z: -1 }, 0)
-      .to(meshParticles.current.position, { y: -20 }, 0)
+      .to(meshParticles.current.position, { y: -10 }, 0)
       .to(simMaterial.current.uniforms.uStrength, { value: 0 }, 0);
 
     timeline.current
@@ -149,30 +153,31 @@ const Experience = () => {
         scene
       )}
 
-      <points ref={meshParticles}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            array={positions}
-            itemSize={3}
-            count={PARTICLES_COUNT}
-          ></bufferAttribute>
-          <bufferAttribute
-            attach="attributes-aParticlesUv"
-            array={particlesUvArray}
-            itemSize={2}
-            count={PARTICLES_COUNT}
-          />
-          <bufferAttribute
-            attach="attributes-aSize"
-            array={particlesSizes}
-            itemSize={1}
-            count={PARTICLES_COUNT}
-          />
-        </bufferGeometry>
-        <renderMaterial ref={renderMaterial} transparent={true} />
-      </points>
-
+      <Float>
+        <points ref={meshParticles}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              array={positions}
+              itemSize={3}
+              count={PARTICLES_COUNT}
+            ></bufferAttribute>
+            <bufferAttribute
+              attach="attributes-aParticlesUv"
+              array={particlesUvArray}
+              itemSize={2}
+              count={PARTICLES_COUNT}
+            />
+            <bufferAttribute
+              attach="attributes-aSize"
+              array={particlesSizes}
+              itemSize={1}
+              count={PARTICLES_COUNT}
+            />
+          </bufferGeometry>
+          <renderMaterial ref={renderMaterial} transparent={true} />
+        </points>
+      </Float>
       <EnvironmentParticles />
 
       <Text
