@@ -6,11 +6,18 @@ import * as THREE from "three";
 import { createPortal, useFrame } from "@react-three/fiber";
 import { getDataTexture, getMorphDataTexture } from "./getDataTexture.js";
 import { useLayoutEffect, useRef } from "react";
-import { useFBO, Text, useScroll, Float } from "@react-three/drei";
+import {
+  useFBO,
+  Text,
+  useScroll,
+  Float,
+  OrbitControls,
+} from "@react-three/drei";
 import EnvironmentParticles from "./EnvironmentParticles.jsx";
 import gsap from "gsap";
+import { Vizir } from "./Vizir.jsx";
 
-const PARTICLES_COUNT = 50000;
+const PARTICLES_COUNT = 60000;
 const SIZE = Math.ceil(Math.sqrt(PARTICLES_COUNT));
 
 const positions = new Float32Array(PARTICLES_COUNT * 3);
@@ -78,7 +85,8 @@ const Experience = () => {
   const textRef = useRef();
   const textRef2 = useRef();
   const timeline = useRef();
-
+  const astronautMesh = useRef();
+  const vizirMesh = useRef();
   const baseTexture = getDataTexture(SIZE);
   const newBaseTexture = getMorphDataTexture(SIZE);
 
@@ -91,13 +99,14 @@ const Experience = () => {
     meshParticles.current.position.x = 10;
     meshParticles.current.rotation.y = -7;
 
+    astronautMesh.current.scale.set(0.8, 0.8, 0.8);
+
     timeline.current
       .to(meshParticles.current.position, { x: 20 }, 0)
       .to(meshParticles.current.rotation, { x: -1.5 }, 0)
       .to(meshParticles.current.position, { z: 12 }, 0)
       .to(meshParticles.current.rotation, { z: -1 }, 0)
-      .to(meshParticles.current.position, { y: -10 }, 0)
-      .to(simMaterial.current.uniforms.uStrength, { value: 0 }, 0);
+      .to(meshParticles.current.position, { y: -10 }, 0);
 
     timeline.current
       .to(meshParticles.current.position, { x: -10 }, 2)
@@ -139,6 +148,7 @@ const Experience = () => {
 
   return (
     <>
+      {/* <OrbitControls /> */}
       {createPortal(
         <mesh>
           <planeGeometry args={[2, 2]} />
@@ -154,29 +164,32 @@ const Experience = () => {
       )}
 
       <Float>
-        <points ref={meshParticles}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              array={positions}
-              itemSize={3}
-              count={PARTICLES_COUNT}
-            ></bufferAttribute>
-            <bufferAttribute
-              attach="attributes-aParticlesUv"
-              array={particlesUvArray}
-              itemSize={2}
-              count={PARTICLES_COUNT}
-            />
-            <bufferAttribute
-              attach="attributes-aSize"
-              array={particlesSizes}
-              itemSize={1}
-              count={PARTICLES_COUNT}
-            />
-          </bufferGeometry>
-          <renderMaterial ref={renderMaterial} transparent={true} />
-        </points>
+        <group ref={astronautMesh}>
+          <Vizir ref={vizirMesh} />
+          <points ref={meshParticles}>
+            <bufferGeometry>
+              <bufferAttribute
+                attach="attributes-position"
+                array={positions}
+                itemSize={3}
+                count={PARTICLES_COUNT}
+              ></bufferAttribute>
+              <bufferAttribute
+                attach="attributes-aParticlesUv"
+                array={particlesUvArray}
+                itemSize={2}
+                count={PARTICLES_COUNT}
+              />
+              <bufferAttribute
+                attach="attributes-aSize"
+                array={particlesSizes}
+                itemSize={1}
+                count={PARTICLES_COUNT}
+              />
+            </bufferGeometry>
+            <renderMaterial ref={renderMaterial} transparent={true} />
+          </points>
+        </group>
       </Float>
       <EnvironmentParticles />
 
