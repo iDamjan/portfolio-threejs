@@ -3,12 +3,11 @@ import { useGLTF } from "@react-three/drei";
 export function getModelPositions(size) {
   const particlesCount = size * size;
 
-  const gltf = useGLTF("./models/zena.glb");
+  const gltf = useGLTF("./models/dna.glb");
 
   console.log(gltf.nodes);
 
-  const modelPositions =
-    gltf.nodes.zenaSoZizki.geometry.attributes.position.array;
+  const modelPositions = gltf.nodes.DNA.geometry.attributes.position.array;
 
   const textureData = new Float32Array(particlesCount * 4);
 
@@ -26,7 +25,7 @@ export function getModelPositions(size) {
       textureData[i4 + 0] = modelPositions[randomIndex + 0];
       textureData[i4 + 1] = modelPositions[randomIndex + 1];
       textureData[i4 + 2] = modelPositions[randomIndex + 2];
-      textureData[i4 + 3] = Math.random();
+      textureData[i4 + 3] = Math.random() * 2;
     }
   }
 

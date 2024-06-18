@@ -31,7 +31,6 @@ export function getDataTexture(size) {
 }
 
 export function getMorphDataTexture(size) {
-  let number = size * size;
   const data = getModelPositions(size);
 
   let dataTexture = new THREE.DataTexture(

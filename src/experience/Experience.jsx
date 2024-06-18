@@ -11,7 +11,7 @@ import EnvironmentParticles from "./EnvironmentParticles.jsx";
 import ScrollProgress from "../components/ScrollProgress.jsx";
 import gsap from "gsap";
 
-const PARTICLES_COUNT = 1000000;
+const PARTICLES_COUNT = 200000;
 const SIZE = Math.ceil(Math.sqrt(PARTICLES_COUNT));
 
 const positions = new Float32Array(PARTICLES_COUNT * 3);
@@ -49,7 +49,7 @@ for (let y = 0; y < SIZE; y++) {
     particlesUvArray[i2 + 0] = uvX;
     particlesUvArray[i2 + 1] = uvY;
 
-    particlesSizes[i] = Math.random();
+    particlesSizes[i] = Math.random() + 0.2;
   }
 }
 
@@ -83,6 +83,7 @@ const Experience = () => {
   const timeline = useRef();
 
   const baseTexture = getDataTexture(SIZE);
+  const newBaseTexture = getMorphDataTexture(SIZE);
 
   useLayoutEffect(() => {
     timeline.current = gsap.timeline({
@@ -110,14 +111,13 @@ const Experience = () => {
     renderMaterial.current.uniforms.uPosition.value = target1.texture;
     simMaterial.current.uniforms.uPosition.value = target0.texture;
 
-    renderMaterial.current.uniforms.uProgress.value = scroll.offset;
-
     let temp = target0;
     target0 = target1;
     target1 = temp;
 
     // Set base texture
     simMaterial.current.uniforms.uBase = new THREE.Uniform(baseTexture);
+    simMaterial.current.uniforms.uNewBase = new THREE.Uniform(newBaseTexture);
     simMaterial.current.uniforms.uTime.value = clock.elapsedTime;
     simMaterial.current.uniforms.uDeltaTime.value = delta;
     simMaterial.current.uniforms.uProgress.value = scroll.offset;
@@ -184,10 +184,10 @@ const Experience = () => {
         rotation={[0, 0, 0]}
         color={[1, 1, 1]}
       >
-        SOFTWARE
+        {/* SOFTWARE */}
       </Text>
       <Text position={[22, 0, 0]} scale={3} color={"#F2F2F2"} ref={textRef2}>
-        DEVELOPER
+        {/* DEVELOPER */}
       </Text>
 
       {/* <Html>

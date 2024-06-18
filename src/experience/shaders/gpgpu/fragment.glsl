@@ -51,24 +51,24 @@ mat3 rotation3dY(float angle) {
 
 
 void main() {
-
-
     vec4 newPosition = texture(uNewPosition, vUv);
     vec4 oldPosition = texture(uPosition, vUv);
+    
     vec4 baseParticle = texture(uBase, vUv);
 
-    float noiseOrigin = simplexNoise4d(vec4(newPosition.xyz * 0.2, 0.0));
-    float noiseTarget = simplexNoise4d(vec4(oldPosition.xyz * 0.2, 0.0));
+    float noiseOrigin = simplexNoise4d(vec4(oldPosition.xyz, 0.0));
+    float noiseTarget = simplexNoise4d(vec4(newPosition.xyz * 0.2, 0.0));
     float noise = mix(noiseOrigin, noiseTarget, uProgress);
     noise = smoothstep(-1.0, 1.0, noise);
 
-    float duration = 0.4;
-    float delay = (1.0 - duration) * noise;
+    float duration = 0.1;
+    float delay = (1.0 - duration) * noise + uDeltaTime;
     float end = delay + duration;
 
     float progress = smoothstep(delay, end, uProgress * 2.0);
 
-    vec4 particle = mix(oldPosition, newPosition, progress);
+    vec4 particle = mix(oldPosition, newPosition,  uProgress);
+   
 
 
     if(particle.a <= 0.0) { 
