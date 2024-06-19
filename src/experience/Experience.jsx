@@ -17,7 +17,7 @@ import EnvironmentParticles from "./EnvironmentParticles.jsx";
 import gsap from "gsap";
 import { Vizir } from "./Vizir.jsx";
 
-const PARTICLES_COUNT = 60000;
+const PARTICLES_COUNT = 3000;
 const SIZE = Math.ceil(Math.sqrt(PARTICLES_COUNT));
 
 const positions = new Float32Array(PARTICLES_COUNT * 3);
@@ -55,7 +55,7 @@ for (let y = 0; y < SIZE; y++) {
     particlesUvArray[i2 + 0] = uvX;
     particlesUvArray[i2 + 1] = uvY;
 
-    particlesSizes[i] = Math.random();
+    particlesSizes[i] = Math.random() * 6;
   }
 }
 
@@ -131,7 +131,7 @@ const Experience = () => {
     simMaterial.current.uniforms.uNewBase = new THREE.Uniform(newBaseTexture);
     simMaterial.current.uniforms.uTime.value = clock.elapsedTime;
     simMaterial.current.uniforms.uDeltaTime.value = delta;
-    simMaterial.current.uniforms.uProgress.value = scroll.offset;
+    simMaterial.current.uniforms.uProgress.value = scroll.scroll.current;
 
     // Rotate sphere
     // meshParticles.current.rotation.x += delta * 0.04;
@@ -165,7 +165,7 @@ const Experience = () => {
 
       <Float>
         <group ref={astronautMesh}>
-          <Vizir ref={vizirMesh} />
+          <Vizir />
           <points ref={meshParticles}>
             <bufferGeometry>
               <bufferAttribute
