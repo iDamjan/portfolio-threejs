@@ -5,7 +5,6 @@ import fragmentShader from "./shaders/fragment.glsl";
 
 const RenderMaterial = shaderMaterial(
   {
-    uPosition: null,
     uProgress: null,
   },
   vertexShader,

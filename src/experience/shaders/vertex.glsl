@@ -1,20 +1,29 @@
+#include "./includes/simplexNoise4d.glsl"
 
-attribute vec2 aParticlesUv;
 attribute float aSize;
+attribute vec3 aNewPosition;
 
-
-varying vec2 vParticlesUv;
-varying float vOpacity;
+uniform float uProgress;
 varying float vDistanceToCenter;
-
-uniform sampler2D uPosition;
 
 void main() {
 
-    vec4 particle = texture(uPosition, aParticlesUv);
+    float noiseOrigin = simplexNoise4d(vec4(position * 0.1, 0.0));
+    float noiseTarget = simplexNoise4d(vec4(aNewPosition * 0.2, 0.0));
+    float noise = mix(noiseOrigin, noiseTarget, uProgress);
+    noise = smoothstep(-0.5, 0.5, noise);
+
+    float duration = 0.2;
+    float delay = (1. - duration) * noise;
+    float end = delay + duration;
+
+    float progress = smoothstep(delay, end, uProgress * 2.0);
+
+    vec3 particle = mix(position, aNewPosition, progress);
+
 
     // Final position
-    vec4 modelPosition = modelMatrix * vec4(particle.xyz, 1.0);
+    vec4 modelPosition = modelMatrix * vec4(particle, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
 
@@ -30,9 +39,6 @@ void main() {
     gl_PointSize = 60.0 * aSize;
     gl_PointSize *= (1.0 / - viewPosition.z);
 
-    // Varyings 
-    vParticlesUv = aParticlesUv;
 
-    vOpacity = particle.a;
     
 }

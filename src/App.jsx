@@ -24,11 +24,11 @@ const App = () => {
     <>
       <Navbar />
       <Canvas className="canvas" camera={{ position: [0, 0, 25] }}>
-        {/* <Environment
+        <Environment
           preset="night"
           background={false}
           backgroundIntensity={2}
-        /> */}
+        />
         <spotLight
           position={[0, 15, 0]}
           angle={0.3}

@@ -2,34 +2,29 @@ import { useGLTF } from "@react-three/drei";
 import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.js";
 import * as THREE from "three";
 
-export function getModelPositions(size) {
-  const particlesCount = size * size;
-
+export function getModelPositions(particlesCount) {
   const { nodes } = useGLTF("./models/dna.glb");
 
   let mesh = nodes.DNA;
   const sampler = new MeshSurfaceSampler(mesh).setWeightAttribute(null).build();
 
-  const textureData = new Float32Array(particlesCount * 4);
+  const data = new Float32Array(particlesCount * 3);
   const point = new THREE.Vector3();
 
   for (let i = 0; i < particlesCount; i++) {
-    const i4 = i * 4;
+    const i3 = i * 3;
 
     sampler.sample(point);
 
-    textureData[i4 + 0] = point.x;
-    textureData[i4 + 1] = point.y;
-    textureData[i4 + 2] = point.z;
-    textureData[i4 + 3] = Math.random() * 2; // Or any other value for the fourth channel
+    data[i3 + 0] = point.x;
+    data[i3 + 1] = point.y;
+    data[i3 + 2] = point.z;
   }
 
-  return textureData;
+  return data;
 }
 
-export function getAstronautPositions(size) {
-  const particlesCount = size * size;
-
+export function getAstronautPositions(particlesCount) {
   const { nodes } = useGLTF("./models/astronaut.glb");
 
   let mesh = null;
@@ -42,19 +37,18 @@ export function getAstronautPositions(size) {
 
   const sampler = new MeshSurfaceSampler(mesh).setWeightAttribute(null).build();
 
-  const textureData = new Float32Array(particlesCount * 4);
+  const data = new Float32Array(particlesCount * 3);
   const point = new THREE.Vector3();
 
   for (let i = 0; i < particlesCount; i++) {
-    const i4 = i * 4;
+    const i3 = i * 3;
 
     sampler.sample(point);
 
-    textureData[i4 + 0] = point.x;
-    textureData[i4 + 1] = point.y;
-    textureData[i4 + 2] = point.z;
-    textureData[i4 + 3] = Math.random() * 2; // Or any other value for the fourth channel
+    data[i3 + 0] = point.x;
+    data[i3 + 1] = point.y;
+    data[i3 + 2] = point.z;
   }
 
-  return textureData;
+  return data;
 }
