@@ -25,8 +25,9 @@ export function getModelPositions(particlesCount) {
 }
 
 export function getAstronautPositions(particlesCount) {
-  const gltf = useGLTF("./models/astronaut2.glb");
-  const { nodes } = useGLTF("./models/astronaut2.glb");
+  const { nodes } = useGLTF("./models/astrodamjan.glb");
+
+  console.log(nodes);
 
   let mesh = null;
   let colors = null;
@@ -35,7 +36,6 @@ export function getAstronautPositions(particlesCount) {
     if (child.isMesh) {
       mesh = child;
       colors = mesh.geometry.attributes.color;
-      console.log(colors);
     }
   });
 
@@ -52,7 +52,7 @@ export function getAstronautPositions(particlesCount) {
   const originalPositions = mesh.geometry.attributes.position.array;
   const data = new Float32Array(finalObject.count * 3);
   const point = new THREE.Vector3();
-  const blendFactor = 0.02; // Adjust this value between 0 and 1 for more or less randomness
+  const blendFactor = 0.01; // Adjust this value between 0 and 1 for more or less randomness
 
   for (let i = 0; i < finalObject.count; i++) {
     const i3 = i * 3;

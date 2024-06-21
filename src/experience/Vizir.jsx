@@ -1,17 +1,18 @@
-import React, { useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+import React, { forwardRef } from "react";
+import { useGLTF, useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { useControls, button } from "leva";
 
-export function Vizir(props) {
+export const Helmet = forwardRef(function (props, ref) {
   const { nodes, materials } = useGLTF("./models/vizir.glb");
+  const scroll = useScroll();
   const material = new THREE.MeshPhysicalMaterial({
     roughness: 0,
     metalness: 1,
   });
   const { position, scale, rotation } = useControls("vizir", {
     position: {
-      value: { x: 10.1, y: -6, z: 1.5 },
+      value: { x: 15.1, y: -6, z: 1.5 },
       step: 0.001,
     },
     rotation: {
@@ -23,25 +24,26 @@ export function Vizir(props) {
       step: 0.01,
     },
   });
+
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} ref={ref}>
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.vizor.geometry}
-        position={[position.x, position.y, position.z]}
+        position={[position.x + scroll.offset, position.y, position.z]}
         rotation={[rotation.x, rotation.y, rotation.z]}
         scale={scale}
       >
         <meshPhysicalMaterial
           roughness={0}
-          metalness={0.3}
+          metalness={0.2}
           reflectivity={1}
           iridescence={1}
         />
       </mesh>
     </group>
   );
-}
+});
 
 useGLTF.preload("/vizir.glb");

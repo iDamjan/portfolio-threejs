@@ -4,10 +4,16 @@ import "./RenderMaterial.jsx";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { Text, useScroll, Float } from "@react-three/drei";
+import {
+  Text,
+  useScroll,
+  Float,
+  Lightformer,
+  Environment,
+} from "@react-three/drei";
 import EnvironmentParticles from "./EnvironmentParticles.jsx";
 import gsap from "gsap";
-import { Vizir } from "./Vizir.jsx";
+import { Helmet } from "./Vizir.jsx";
 import {
   getAstronautPositions,
   getModelPositions,
@@ -25,13 +31,14 @@ const Experience = () => {
   const timeline = useRef();
   const astronautMesh = useRef();
 
+  const helmetRef = useRef();
   useLayoutEffect(() => {
     timeline.current = gsap.timeline({
       defaults: { duration: 2, ease: "power1.inOut" },
     });
 
     meshParticles.current.position.y = -5;
-    meshParticles.current.position.x = 10;
+    meshParticles.current.position.x = 15;
     meshParticles.current.rotation.y = -7;
 
     astronautMesh.current.scale.set(0.8, 0.8, 0.8);
@@ -39,9 +46,10 @@ const Experience = () => {
     timeline.current
       .to(meshParticles.current.position, { x: 20 }, 0)
       .to(meshParticles.current.rotation, { x: -1.5 }, 0)
-      .to(meshParticles.current.position, { z: 12 }, 0)
+      .to(meshParticles.current.position, { z: 20 }, 0)
       .to(meshParticles.current.rotation, { z: -1 }, 0)
-      .to(meshParticles.current.position, { y: -10 }, 0);
+      .to(meshParticles.current.position, { y: -10 }, 0)
+      .to(helmetRef.current.position, { y: 30 }, 0);
 
     timeline.current
       .to(meshParticles.current.position, { x: -10 }, 2)
@@ -52,7 +60,7 @@ const Experience = () => {
   const count = getAstronautPositions(PARTICLES_COUNT).count;
   const particlesSizes = new Float32Array(count);
   for (let i = 0; i < count; i++) {
-    particlesSizes[i] = Math.random() * 4;
+    particlesSizes[i] = Math.random() * 5;
   }
 
   useFrame(({ gl, clock }, delta) => {
@@ -70,10 +78,20 @@ const Experience = () => {
   return (
     <>
       {/* <OrbitControls /> */}
+      <Environment
+        background={false}
+        files={"./stars2kEnvMap.hdr"}
+        backgroundIntensity={3}
+      >
+        <mesh>
+          <planeGeometry args={[10, 10, 10]} />
+          <meshBasicMaterial color={"yellow"} />
+        </mesh>
+      </Environment>
 
       <Float>
         <group ref={astronautMesh}>
-          <Vizir />
+          <Helmet ref={helmetRef} />
           <points ref={meshParticles}>
             <bufferGeometry>
               <bufferAttribute
@@ -101,7 +119,11 @@ const Experience = () => {
                 count={count}
               />
             </bufferGeometry>
-            <renderMaterial ref={renderMaterial} transparent={true} />
+            <renderMaterial
+              ref={renderMaterial}
+              transparent={true}
+              additiveBlending={true}
+            />
           </points>
         </group>
       </Float>
