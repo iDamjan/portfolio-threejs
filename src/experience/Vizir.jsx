@@ -5,11 +5,9 @@ import { useControls, button } from "leva";
 
 export function Vizir(props) {
   const { nodes, materials } = useGLTF("./models/vizir.glb");
-  const material = new THREE.MeshStandardMaterial({
+  const material = new THREE.MeshPhysicalMaterial({
     roughness: 0,
     metalness: 1,
-    color: "white",
-    side: THREE.DoubleSide,
   });
   const { position, scale, rotation } = useControls("vizir", {
     position: {
@@ -31,11 +29,17 @@ export function Vizir(props) {
         castShadow
         receiveShadow
         geometry={nodes.vizor.geometry}
-        material={material}
         position={[position.x, position.y, position.z]}
         rotation={[rotation.x, rotation.y, rotation.z]}
         scale={scale}
-      />
+      >
+        <meshPhysicalMaterial
+          roughness={0}
+          metalness={0.3}
+          reflectivity={1}
+          iridescence={1}
+        />
+      </mesh>
     </group>
   );
 }

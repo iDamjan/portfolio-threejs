@@ -1,5 +1,5 @@
 varying float vDistanceToCenter;
-
+varying vec4 vColor;
 uniform float uProgress;
 
 void main() {
@@ -9,7 +9,7 @@ void main() {
     if(distanceToCenter > 0.5) {
         discard;
     }
-     gl_FragColor = vec4(sin(1.0 * vDistanceToCenter * 0.1), cos(vDistanceToCenter * 1.0 * 0.7), 1.0 * vDistanceToCenter * 0.5   + uProgress, 1.0);
+     gl_FragColor = vec4(vColor);
 
     #include <tonemapping_fragment>
     #include <colorspace_fragment>

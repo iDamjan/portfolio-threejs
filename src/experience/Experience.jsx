@@ -3,7 +3,7 @@ import "./RenderMaterial.jsx";
 
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { Text, useScroll, Float } from "@react-three/drei";
 import EnvironmentParticles from "./EnvironmentParticles.jsx";
 import gsap from "gsap";
@@ -14,11 +14,6 @@ import {
 } from "./getModelPositions.js";
 
 const PARTICLES_COUNT = 3000;
-
-const particlesSizes = new Float32Array(PARTICLES_COUNT);
-for (let i = 0; i < PARTICLES_COUNT; i++) {
-  particlesSizes[i] = Math.random() * 6;
-}
 
 const Experience = () => {
   const scroll = useScroll();
@@ -54,6 +49,12 @@ const Experience = () => {
       .to(meshParticles.current.position, { z: 10 }, 2);
   }, []);
 
+  const count = getAstronautPositions(PARTICLES_COUNT).count;
+  const particlesSizes = new Float32Array(count);
+  for (let i = 0; i < count; i++) {
+    particlesSizes[i] = Math.random() * 4;
+  }
+
   useFrame(({ gl, clock }, delta) => {
     textRef.current.position.y = scroll.offset * 50;
     textRef2.current.position.y = scroll.offset * 50;
@@ -77,9 +78,9 @@ const Experience = () => {
             <bufferGeometry>
               <bufferAttribute
                 attach="attributes-position"
-                array={getAstronautPositions(PARTICLES_COUNT)}
+                array={getAstronautPositions(PARTICLES_COUNT).positionArray}
                 itemSize={3}
-                count={PARTICLES_COUNT}
+                count={getAstronautPositions(PARTICLES_COUNT).count}
               ></bufferAttribute>
               <bufferAttribute
                 attach="attributes-aNewPosition"
@@ -91,7 +92,13 @@ const Experience = () => {
                 attach="attributes-aSize"
                 array={particlesSizes}
                 itemSize={1}
-                count={PARTICLES_COUNT}
+                count={count}
+              />
+              <bufferAttribute
+                attach="attributes-aColor"
+                array={getAstronautPositions(PARTICLES_COUNT).colors}
+                itemSize={4}
+                count={count}
               />
             </bufferGeometry>
             <renderMaterial ref={renderMaterial} transparent={true} />

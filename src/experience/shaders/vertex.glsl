@@ -2,9 +2,12 @@
 
 attribute float aSize;
 attribute vec3 aNewPosition;
+attribute vec4 aColor;
 
 uniform float uProgress;
 varying float vDistanceToCenter;
+
+varying vec4 vColor;
 
 void main() {
 
@@ -36,8 +39,10 @@ void main() {
 
 
     // Point size
-    gl_PointSize = 60.0 * aSize;
+    gl_PointSize = 20.0 * aSize;
     gl_PointSize *= (1.0 / - viewPosition.z);
+
+    vColor = aColor;
 
 
     

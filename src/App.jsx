@@ -24,20 +24,12 @@ const App = () => {
     <>
       <Navbar />
       <Canvas className="canvas" camera={{ position: [0, 0, 25] }}>
-        <Environment
-          preset="night"
-          background={false}
-          backgroundIntensity={2}
+        <directionalLight
+          position={[-10, -3, 10]}
+          intensity={0.3}
+          color={"orange"}
         />
-        <spotLight
-          position={[0, 15, 0]}
-          angle={0.3}
-          penumbra={1}
-          castShadow
-          intensity={2}
-          shadow-bias={-0.0001}
-        />
-        <ambientLight intensity={0.5} />
+
         <ScrollControls pages={3}>
           <Experience />
 
@@ -54,7 +46,7 @@ const App = () => {
             </div>
           </Scroll>
         </ScrollControls>
-        <EffectComposer>
+        {/* <EffectComposer>
           <DepthOfField
             focusDistance={0}
             focalLength={3}
@@ -62,7 +54,7 @@ const App = () => {
             height={480}
           />
           <Bloom luminanceThreshold={1} luminanceSmoothing={2} height={300} />
-        </EffectComposer>
+        </EffectComposer> */}
       </Canvas>
     </>
   );
