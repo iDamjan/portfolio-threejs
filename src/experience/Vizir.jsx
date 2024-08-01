@@ -10,6 +10,7 @@ export const Helmet = forwardRef(function (props, ref) {
     roughness: 0,
     metalness: 1,
   });
+  // Added comment
   const { position, scale, rotation } = useControls("vizir", {
     position: {
       value: { x: 15.1, y: -6, z: 1.5 },
