@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import * as THREE from "three";
 
 const EnvironmentParticles = () => {
-  const PARTICLES_COUNT = 2000;
+  const PARTICLES_COUNT = 1000;
   const positions = new Float32Array(PARTICLES_COUNT * 3);
   const sizes = new Float32Array(PARTICLES_COUNT);
 

@@ -16,7 +16,7 @@ void main() {
 
 
     // Point size
-    gl_PointSize = 10.0 * aSize;
+    gl_PointSize = 30.0 * aSize;
     gl_PointSize *= (1.0 / - viewPosition.z);
 
 

@@ -27,8 +27,6 @@ export function getModelPositions(particlesCount) {
 export function getAstronautPositions(particlesCount) {
   const { nodes } = useGLTF("./models/astrodamjan.glb");
 
-  console.log(nodes);
-
   let mesh = null;
   let colors = null;
   // Traverse the nodes to find the first mesh

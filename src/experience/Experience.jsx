@@ -63,9 +63,13 @@ const Experience = () => {
     particlesSizes[i] = Math.random() * 5;
   }
 
+  const lightRef = useRef();
+
   useFrame(({ gl, clock }, delta) => {
     textRef.current.position.y = scroll.offset * 50;
     textRef2.current.position.y = scroll.offset * 50;
+
+    lightRef.current.position.x = scroll.offset * 100;
 
     renderMaterial.current.uniforms.uProgress.value = scroll.offset;
 
@@ -82,13 +86,19 @@ const Experience = () => {
         background={false}
         files={"./stars2kEnvMap.hdr"}
         backgroundIntensity={3}
-      >
-        <mesh>
-          <planeGeometry args={[10, 10, 10]} />
-          <meshBasicMaterial color={"yellow"} />
-        </mesh>
-      </Environment>
+      ></Environment>
 
+      <mesh>
+        <sphereGeometry args={[100, 50, 50]} />
+        <meshStandardMaterial side={THREE.DoubleSide} />
+      </mesh>
+      <hemisphereLight color="#291363" groundColor="#7F0B7F" intensity={0.3} />
+      <directionalLight
+        ref={lightRef}
+        color="#4A4ACE"
+        intensity={0.2}
+        position={[0, -10, 0]}
+      />
       <Float>
         <group ref={astronautMesh}>
           <Helmet ref={helmetRef} />

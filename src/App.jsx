@@ -10,6 +10,7 @@ import {
 import Experience from "./experience/Experience";
 import { useEffect, useRef } from "react";
 import Navbar from "./components/Navbar";
+import ScrollDownAni from "./components/ScrollDownAni";
 
 const App = () => {
   const text = useRef();
@@ -17,6 +18,7 @@ const App = () => {
   return (
     <>
       <Navbar />
+      <ScrollDownAni />
       <Canvas className="canvas" camera={{ position: [0, 0, 25] }}>
         <ScrollControls pages={3}>
           <Experience />
